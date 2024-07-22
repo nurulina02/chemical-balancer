@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chemical Reaction Balancer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Chemical Reaction Balancer</h1>
+        <form id="balance-form">
+            <label for="equation">Enter the unbalanced chemical equation:</label>
+            <input type="text" id="equation" name="equation" required>
+            <button type="submit">Balance Equation</button>
+        </form>
+        <div id="result"></div>
+    </div>
+    <script>
+        document.getElementById('balance-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const equation = document.getElementById('equation').value;
+
+            fetch('/balance', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ equation })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = data.balanced_equation;
+            });
+        });
+    </script>
+</body>
+</html>
